@@ -237,18 +237,22 @@ public:
         _read_idx += len;
     }
     void MoveWriteOffset(int len) {
-        assert(len <= PostIdle());
+        if(len>=PostIdle()){
+            LOG(logLevel::DEBUG) << "len: " << len << " PostIdle: " << PostIdle();
+            abort();
+        }
         _write_idx += len;
     }
     void Clear() { _read_idx = _write_idx = 0; }
     void EnsureWrite(int len){
-        if(PostIdle() >= len){
+        if(PostIdle() > len){
             return;
         }
-        if(PreIdle()+PostIdle()>=len){
+        if(PreIdle()+PostIdle()>len){
+            size_t size = ReadableSize();
             std::copy(GetReadPos(), GetReadPos() + ReadableSize(), _buffer.begin());
             _read_idx = 0;
-            _write_idx = ReadableSize();
+            _write_idx = size;
         }else{
             _buffer.resize(Capacity() + 2*len);
         }

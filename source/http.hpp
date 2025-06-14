@@ -782,7 +782,7 @@ namespace byBit
             }
             void OnMessage(const PtrConnection& conn,Buffer* buf){
                 HttpContext *context = conn->GetConext()->get<HttpContext>();
-                context->RecvHttpReq(buf);
+                context->RecvHttpReq(buf);                //分析请求
                 HttpRequest& req = context->GetReq();
                 HttpResponse res(context->RespStatus());
                 if (context->RespStatus() >= 400)
@@ -803,7 +803,7 @@ namespace byBit
                 Router(req, &res);
                 WriteResponse(conn, req, res);//组织响应发送给客户端
                 context->Reset();
-                LOG(logLevel::DEBUG) << "Buffer.size: " << buf->ReadableSize();
+                LOG(logLevel::DEBUG) << "_in_buffer.size: " << buf->ReadableSize();
                 if (res.Close() == true)
                     conn->Shutdown(); // 短链接则直接关闭
             }

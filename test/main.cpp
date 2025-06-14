@@ -39,7 +39,7 @@ int main()
     server.AddDeleteMethod("/quit",DelFile);
     server.AddPutMethod("/good",PutFile);
     server.AddGetMethod("/hello",Hello);
-    server.AddGetMethod("/nice",Hello);
+    server.AddPostMethod("/nice",Hello);
     server.AddGetMethod("/hello",Hello);
     server.Start();
     return 0;
