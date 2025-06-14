@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>火影忍者 | 忍者的传承</title>
+  <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Russo One', sans-serif;
+      background: url('https://wallpaperaccess.com/full/168894.jpg') no-repeat center center/cover;
+      color: white;
+      min-height: 100vh;
+      backdrop-filter: blur(4px);
+    }
+
+    header {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 2rem;
+      text-align: center;
+      border-bottom: 2px solid orange;
+    }
+
+    header h1 {
+      font-size: 3.5rem;
+      color: orange;
+      text-shadow: 2px 2px black;
+      letter-spacing: 3px;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 3rem 1rem;
+      background: linear-gradient(to right, rgba(0,0,0,0.6), rgba(255,140,0,0.3));
+    }
+
+    .hero h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .cards {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 3rem 1rem;
+      gap: 2rem;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 1rem;
+      border-radius: 15px;
+      width: 250px;
+      box-shadow: 0 0 20px rgba(255,165,0,0.5);
+      text-align: center;
+      transition: transform 0.3s;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+    }
+
+    .card img {
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+    }
+
+    .card h3 {
+      color: #ffd700;
+      margin-bottom: 0.5rem;
+    }
+
+    .card p {
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    footer {
+      background: rgba(0, 0, 0, 0.7);
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      border-top: 2px solid orange;
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        width: 90%;
+      }
+
+      header h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>火影忍者 忍者的传承</h1>
+  </header>
+
+  <section class="hero">
+    <h2>欢迎来到木叶村</h2>
+    <p>
+      在这片充满羁绊与忍术的土地上，每一位忍者都书写着属于自己的传奇。
+      无论是九尾之力、写轮眼，还是百豪之术，这里都有你想要的答案。
+    </p>
+  </section>
+
+  <section class="cards">
+    <div class="card">
+      <img src="https://upload.wikimedia.org/wikipedia/en/9/94/Naruto_Uzumaki.png" alt="鸣人">
+      <h3>漩涡鸣人</h3>
+      <p>九尾人柱力，热血且坚毅，梦想成为火影，改变了整个忍界的命运。</p>
+    </div>
+    <div class="card">
+      <img src="https://upload.wikimedia.org/wikipedia/en/7/74/SasukeUchihaPartII.png" alt="佐助">
+      <h3>宇智波佐助</h3>
+      <p>孤独的复仇者，拥有写轮眼与轮回眼，走出一条属于自己的忍道。</p>
+    </div>
+    <div class="card">
+      <img src="https://upload.wikimedia.org/wikipedia/en/7/70/Sakura_Haruno.png" alt="小樱">
+      <h3>春野樱</h3>
+      <p>医疗忍者，纲手的弟子，拥有强大的查克拉控制与怪力。</p>
+    </div>
+    <div class="card">
+      <img src="https://upload.wikimedia.org/wikipedia/en/4/4f/Kakashi_Hatake.png" alt="卡卡西">
+      <h3>旗木卡卡西</h3>
+      <p>拷贝忍者，冷静智慧，曾任第六代火影，是第七班的导师。</p>
+    </div>
+  </section>
+
+  <footer>
+    火影忍者 © 2025 All rights reserved | Made with ❤️ by 忍者粉丝
+  </footer>
+
+</body>
+</html>
