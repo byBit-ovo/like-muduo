@@ -641,8 +641,9 @@ namespace byBit
                     _recv_statu = RECV_HTTP_OVER;
                     return true;
                 }
+                int moveoffset = buf->ReadableSize();
                 _req._body.append(buf->GetReadPos(), buf->ReadableSize());
-                buf->MoveReadOffset(reallen);
+                buf->MoveReadOffset(moveoffset);
                 return true;
             }
     };
@@ -751,6 +752,7 @@ namespace byBit
                 }else if (req._method == "POST") {
                     return Dispatcher(req, res, _post_router);
                 }else if (req._method == "PUT") {
+                    LOG(logLevel::INFO) << "Router to PUT...";
                     return Dispatcher(req, res, _put_router);
                 }else if (req._method == "DELETE") {
                     return Dispatcher(req, res, _delete_router);
@@ -781,31 +783,36 @@ namespace byBit
                 // LOG(logLevel::INFO) << "Connection set up ";
             }
             void OnMessage(const PtrConnection& conn,Buffer* buf){
-                HttpContext *context = conn->GetConext()->get<HttpContext>();
-                context->RecvHttpReq(buf);                //分析请求
-                HttpRequest& req = context->GetReq();
-                HttpResponse res(context->RespStatus());
-                if (context->RespStatus() >= 400)
-                {
-                    std::cout << "400" << std::endl;
-                    ErrorHandler(req, &res);//填充一个错误显示页面数据到rsp中
+                LOG(logLevel::DEBUG) << "On message...";
+                while(buf->ReadableSize() > 0){
+                    HttpContext *context = conn->GetConext()->get<HttpContext>();
+                    context->RecvHttpReq(buf);                //分析请求
+                    HttpRequest& req = context->GetReq();
+                    HttpResponse res(context->RespStatus());
+                    if (context->RespStatus() >= 400)
+                    {
+                        std::cout << "context->RespStatus() >= 400" << std::endl;
+                        ErrorHandler(req, &res);//填充一个错误显示页面数据到rsp中
+                        WriteResponse(conn, req, res);//组织响应发送给客户端
+                        context->Reset();
+                        buf->MoveReadOffset(buf->ReadableSize());//出错了就把缓冲区数据清空
+                        conn->Shutdown();
+                        return;
+                    }
+                    if(context->RecvStatus()!=RECV_HTTP_OVER){
+                        std::cout << "!=RECV_HTTP_OVER" << std::endl;
+                        return;
+                    }
+                    // std::cout << "Router" << std::endl;
+                    Router(req, &res);             //根据请求构建应答
                     WriteResponse(conn, req, res);//组织响应发送给客户端
-                    context->Reset();
-                    buf->MoveReadOffset(buf->ReadableSize());//出错了就把缓冲区数据清空
-                    conn->Shutdown();
-                    return;
+                    context->Reset();             //重置链接上下文
+                    // LOG(logLevel::DEBUG) << "_in_buffer.size: " << buf->ReadableSize();
+                    if (res.Close() == true){
+                        conn->Shutdown();
+                        return;
+                    }
                 }
-                if(context->RecvStatus()!=RECV_HTTP_OVER){
-                    std::cout << "!=RECV_HTTP_OVER" << std::endl;
-                    return;
-                }
-                std::cout << "Router" << std::endl;
-                Router(req, &res);
-                WriteResponse(conn, req, res);//组织响应发送给客户端
-                context->Reset();
-                LOG(logLevel::DEBUG) << "_in_buffer.size: " << buf->ReadableSize();
-                if (res.Close() == true)
-                    conn->Shutdown(); // 短链接则直接关闭
             }
 
         public:
@@ -843,7 +850,7 @@ namespace byBit
         public:
             netWork(){
                 signal(SIGPIPE, SIG_IGN);
-                LOG(logLevel::INFO) << "server init pipe";
+                // LOG(logLevel::INFO) << "server init pipe";
             }
     };
     static netWork nw;

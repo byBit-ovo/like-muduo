@@ -17,6 +17,7 @@ std::string RequestStr(const HttpRequest &req) {
 void Hello(const HttpRequest &req, HttpResponse *rsp) 
 {
     rsp->SetContent(RequestStr(req), "text/plain");
+    // sleep(15);
 }
 void Login(const HttpRequest &req, HttpResponse *rsp) 
 {
@@ -24,8 +25,9 @@ void Login(const HttpRequest &req, HttpResponse *rsp)
 }
 void PutFile(const HttpRequest &req, HttpResponse *rsp) 
 {
+    LOG(logLevel::INFO) << "PUT ...";
     std::string pathname = WWWROOT + req._url;
-    Util::WriteFile(pathname, req._body);
+    Util::WriteFile(pathname, req._body); 
 }
 void DelFile(const HttpRequest &req, HttpResponse *rsp) 
 {
@@ -37,7 +39,7 @@ int main()
     server.SetThreadCount(3);
     server.SetAssetDir(WWWROOT);
     server.AddDeleteMethod("/quit",DelFile);
-    server.AddPutMethod("/good",PutFile);
+    server.AddPutMethod("/big.txt",PutFile);
     server.AddGetMethod("/hello",Hello);
     server.AddPostMethod("/nice",Hello);
     server.AddGetMethod("/hello",Hello);

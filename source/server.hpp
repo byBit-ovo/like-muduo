@@ -544,14 +544,15 @@ public:
 		}
 		~Timerfd() { close(_fd); }
 		int Fd() { return _fd; }
-		void Read(){
+		int Read(){
 			uint64_t val = 0;
 			int n = read(_fd, &val, sizeof(uint64_t));
 			if(n<0){
 				LOG(logLevel::ERROR) << "Timerfd read error...";
 			}
-		}
-	};
+            return val;
+        }
+    };
 
 
     
@@ -607,7 +608,12 @@ public:
 			_clock[_tick].clear();
 		}
 		void Remove(uint64_t id) { _tasks.erase(id); }
-		void Tick() { _tfd.Read();Increment();}
+		void Tick() {
+            int times = _tfd.Read();
+            for (int i = 0; i < times;++i){
+                Increment();
+            }
+        }
 
 		void Cancel(uint64_t id){
 			auto iter = _tasks.find(id);
@@ -916,6 +922,7 @@ public:
             }
         }
         void ReleaseInLoop(){
+            LOG(logLevel::INFO) << "release connection...";
             _status = DISCONNECTED;
             _channel->RemoveFromEpoll();
             _sock.Close();
@@ -941,7 +948,7 @@ public:
                 return;
             }
             _out_buffer.WriteAndPush(buff);
-            LOG(logLevel::DEBUG) << "_out_buffer.size(): " << _out_buffer.ReadableSize();
+            // LOG(logLevel::DEBUG) << "_out_buffer.size(): " << _out_buffer.ReadableSize();
             if (_channel->WriteAble() == false)
             {
                 _channel->CareWrite();
@@ -978,12 +985,13 @@ public:
         void Send(const char *data, size_t len) {   
             Buffer buf;
             buf.WriteAndPush(data, len); 
-            _loop->RunInLoop(std::bind(&Connection::SendInLoop, this, buf));
+            _loop->RunInLoop(std::bind(&Connection::SendInLoop, this, std::move(buf)));
         }
         void Shutdown(){
             _loop->RunInLoop(std::bind(&Connection::ShutdownInLoop, this));
         }
         void Release(){
+            LOG(logLevel::DEBUG) <<"准备释放连接...";
             _loop->PushTask(std::bind(&Connection::ReleaseInLoop, this));
         }
         void EnableInactiveRelease(int sec) {
