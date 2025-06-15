@@ -13,8 +13,8 @@ int main(int argc,char* argv[])
     uint16_t port = std::stoi(argv[2]);
     client.BuildClient(ip, port);
     char in[1024];
-    std::string message = "GET /hello HTTP/1.1\r\nConnection: keep-alive\r\nContent-Length: 0\r\n\r\n";
-    int n = 10;
+    std::string message = "GET /hello HTTP/1.1\r\nConnection: keep-alive\r\nContent-Length: 100\r\n\r\nbyBit";
+    int n = 100;
     while (n--)
     {
         int ret = client.Send(message.c_str(), message.size(), false);
@@ -22,9 +22,11 @@ int main(int argc,char* argv[])
             exit(0);
         }
         sleep(1);
-        int n = client.Read(in, 1023, true);
-        in[n] = 0; 
-        std::cout << in << std::endl;
+        int n = client.Read(in, 1023, false);
+        if(n>0){
+            in[n] = 0; 
+            std::cout << in << std::endl;
+        }
     }
     std::cout << "sleeping..." << std::endl;
     int t = 10;
