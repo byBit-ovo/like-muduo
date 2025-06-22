@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
     client.BuildClient(ip, port);
     std::string message = "PUT /big.txt HTTP/1.1\r\nConnection: keep-alive\r\n";
     std::string body;
-    Util::ReadFile("book.txt", &body);
+    Util::ReadFile("./book.txt", &body);
     message += "Content-Length: " + std::to_string(body.size()) + "\r\n\r\n";
     message += body;
     int ret = client.Send(message.c_str(), message.size(), false);
