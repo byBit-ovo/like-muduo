@@ -1025,7 +1025,7 @@ public:
         }
         void SetReadCallback(const Handle_accept& cb){
             _call_back = cb;
-            _channel->CareRead();//              must be cared after _call_back is set,or fd will be leaked!
+            _channel->CareRead();
         }
         void accept()
         {
