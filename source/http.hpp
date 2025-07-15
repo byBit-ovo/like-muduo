@@ -752,7 +752,7 @@ namespace byBit
                 }else if (req._method == "POST") {
                     return Dispatcher(req, res, _post_router);
                 }else if (req._method == "PUT") {
-                    LOG(logLevel::INFO) << "Router to PUT...";
+                    // LOG(logLevel::INFO) << "Router to PUT...";
                     return Dispatcher(req, res, _put_router);
                 }else if (req._method == "DELETE") {
                     return Dispatcher(req, res, _delete_router);
@@ -783,7 +783,7 @@ namespace byBit
                 // LOG(logLevel::INFO) << "Connection set up ";
             }
             void OnMessage(const PtrConnection& conn,Buffer* buf){
-                LOG(logLevel::DEBUG) << "On message...";
+                // LOG(logLevel::DEBUG) << "On message...";
                 while(buf->ReadableSize() > 0){
                     HttpContext *context = conn->GetConext()->get<HttpContext>();
                     context->RecvHttpReq(buf);                //分析请求

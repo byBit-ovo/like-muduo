@@ -145,7 +145,7 @@ namespace byBit
         bool BuildServer(uint16_t port,std::string ip="0.0.0.0",bool isBlock=false,bool isReuse=true){
             Create();
             if(!Bind(ip,port)) return false;
-            if(isBlock) SetNoBlock();
+            if(!isBlock) SetNoBlock();
             if(isReuse) ReuseAddress();
             if(!Listen()) return false;
             return true;
@@ -922,7 +922,7 @@ public:
             }
         }
         void ReleaseInLoop(){
-            LOG(logLevel::INFO) << "release connection...";
+            // LOG(logLevel::INFO) << "release connection...";
             _status = DISCONNECTED;
             _channel->RemoveFromEpoll();
             _sock.Close();
@@ -991,7 +991,7 @@ public:
             _loop->RunInLoop(std::bind(&Connection::ShutdownInLoop, this));
         }
         void Release(){
-            LOG(logLevel::DEBUG) <<"准备释放连接...";
+            // LOG(logLevel::DEBUG) <<"准备释放连接...";
             _loop->PushTask(std::bind(&Connection::ReleaseInLoop, this));
         }
         void EnableInactiveRelease(int sec) {

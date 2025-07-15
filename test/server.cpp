@@ -6,6 +6,7 @@ int main(int argc,char* argv[])
         LOG(logLevel::ERROR) << "Format error..";
         exit(1);
     }
+    
     byBit::Socket sk;
     sk.BuildServer(std::stoi(argv[1]));
     byBit::Epoller poller;
@@ -13,5 +14,6 @@ int main(int argc,char* argv[])
     std::function<void()> rcd = std::bind(&byBit::Socket::Accept, &sk);
     listener->SetReadCallback(rcd);
     poller.Add(listener);
+   
     return 0;
 }
