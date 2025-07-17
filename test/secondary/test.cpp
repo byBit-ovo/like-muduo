@@ -135,18 +135,22 @@ void test2(uint16_t port)
     loop.Start();
     delete pool;
 }
+void test(){
+    static int a = 1;
+    ++a;
+}
 int main(int argc,char* argv[])
 {
-    if(argc != 2){
-        LOG(logLevel::ERROR) << "Format error";
-        exit(1);
-    }
-    uint16_t port = std::stoi(argv[1]);
-    // test2(port);
-    TcpServer server(port);
-    server.SetThreadsCount(3);
-    server.EnableInactiveRelease(20);
-    server.Start();
+    // if(argc != 2){
+    //     LOG(logLevel::ERROR) << "Format error";
+    //     exit(1);
+    // }
+    // uint16_t port = std::stoi(argv[1]);
+    // // test2(port);
+    // TcpServer server(port);
+    // server.SetThreadsCount(3);
+    // server.EnableInactiveRelease(20);
+    // server.Start();
 
     return 0;
 }
