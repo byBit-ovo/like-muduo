@@ -622,7 +622,7 @@ namespace byBit
                 std::string key = line.substr(0, pos);
                 std::string val = line.substr(pos + 2);
                 _req.SetHeader(key, val);
-                _recv_statu = RECV_HTTP_BODY;
+                // _recv_statu = RECV_HTTP_BODY;
                 return true;
             }
             bool RecvBody(Buffer* buf){
@@ -719,7 +719,7 @@ namespace byBit
             {
                 LOG(logLevel::INFO) << "reading static file...";
                 std::string url = _asset_dir + req._url;
-                std::cout << url << std::endl;
+                // std::cout << url << std::endl;
                 bool n = Util::ReadFile(url, &res->_body);
                 if(n==false){
                     return;
