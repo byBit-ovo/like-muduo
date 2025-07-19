@@ -52,7 +52,7 @@ namespace byBit
                 }
                 return -1;
             }
-            out[n] = 0;
+            // out[n] = 0;
             // LOG(logLevel::DEBUG) << "socket read over...";
             return n;
         }
@@ -76,6 +76,7 @@ namespace byBit
                 LOG(logLevel::ERROR) << "Create socket error...";
                 exit(1);
             }
+            SetNoBlock();
         }
         bool Bind(std::string ip, uint16_t port)
         {
@@ -356,8 +357,16 @@ public:
         void SetAnyCallback(const Callback_t &cb) { _any_callback = cb; }
         bool ReadAble() { return (_events & EPOLLIN); }
         bool WriteAble() { return (_events & EPOLLOUT); }
-        void CareRead()  {_events |= EPOLLIN;UpdateToEpoll();}
-        void CareWrite(){_events |= EPOLLOUT; UpdateToEpoll(); }
+        void CareRead()  {
+            _events |= EPOLLIN;
+            // _events |= EPOLLET; 
+            UpdateToEpoll();
+        }
+        void CareWrite(){
+            _events |= EPOLLOUT; 
+            // _events |= EPOLLET; 
+            UpdateToEpoll(); 
+        }
         void DisableRead() {_events &= ~EPOLLIN;UpdateToEpoll();}
         void DisableWrite() {_events &= ~EPOLLOUT;UpdateToEpoll();}
         void DisableAll() {_events = 0;UpdateToEpoll();}
@@ -853,6 +862,25 @@ public:
                 _message_callback(shared_from_this(), &_in_buffer);
             }
         }
+        // void HandleRead(){
+        //     char buff[65535];
+        //     int count = 0,n=0;
+        //     while(count >= 0){
+        //         count = _sock.Read(buff+n, sizeof(buff) - n, false);
+        //         if(count==0){
+        //             break;
+        //         }
+        //         if(count<0){
+        //             LOG(logLevel::ERROR) << "Connection read error";
+        //             ShutdownInLoop();                              
+        //         }
+        //         n += count;
+        //     }           
+        //     _in_buffer.WriteAndPush(buff, n);
+        //     if(_in_buffer.ReadableSize()>0){
+        //         _message_callback(shared_from_this(), &_in_buffer);
+        //     }
+        // }
         void HandleWrite(){
             int n = _sock.Send(_out_buffer.GetReadPos(), _out_buffer.ReadableSize(), false);
             if(n<0){
