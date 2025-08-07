@@ -770,7 +770,7 @@ public:
             return _loop;
         }
     };
-
+  
     class LoopThreadPool
     {
     private:
@@ -831,7 +831,7 @@ public:
         Channel_t _channel;    
         Buffer _in_buffer;
         Buffer _out_buffer;
-        Any _context;
+        Any _context;          //连接上下文
         ConnStat _status;
         using ConnectedCallback = std::function<void(const PtrConnection&)>;
         using MessageCallback = std::function<void(const PtrConnection&, Buffer *)>;
