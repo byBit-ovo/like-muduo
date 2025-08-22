@@ -37,8 +37,8 @@ namespace byBit
         ~Socket() { Close(); }
         void Close(){
             // std::cout << "close fd is" << _fd << std::endl;
-            if (_fd >= 0)
-                close(_fd);
+            // if (_fd >= 0)
+            close(_fd);
             _fd = -1;
         }
         int Fd() { return _fd; }

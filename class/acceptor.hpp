@@ -3,7 +3,7 @@
 #include "Socket.hpp"
 namespace byBit
 {
-        class Acceptor
+    class Acceptor
     {
     private:
         using Handle_accept = std::function<void(int)>;
