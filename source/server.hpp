@@ -656,6 +656,7 @@ public:
 		TimeWheel(EventLoop *loop) : _loop(loop), _tick(0), _capacity(60), _clock(_capacity),_tfd(){
 			Channel_t tch = std::make_shared<Channel>(_tfd.Fd(), _loop);
 			tch->SetReadCallback(std::bind(&TimeWheel::Tick,this));
+            //关键一步，将channel更新至关联的loop->epoll
 			tch->CareRead();
 		}
         bool HasTimer(uint64_t id) { return _tasks.count(id); }
@@ -703,6 +704,7 @@ public:
             PushTask(t);
         }
 
+        //可能会有多个线程往_task推送任务，所以加锁
         void PushTask(const Task_t& t){
             {
                 std::unique_lock<std::mutex> guard(_mutex);
