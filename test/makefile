@@ -1,5 +1,9 @@
 test: main.cpp
 	g++ $^ -o $@ -std=c++17
-.PHONY:clean
+
+proactor_test: proactor_main.cpp
+	g++ $^ -o $@ -std=c++17 -luring -lpthread
+
+.PHONY: clean
 clean:
-	rm test
+	rm -f test proactor_test
